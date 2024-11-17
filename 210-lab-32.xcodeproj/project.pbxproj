@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0F1627C62CE830F300559863 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1627C52CE830F300559863 /* main.cpp */; };
+		0FB8BCC62CE9B1600023A4C8 /* lab-33.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB8BCC52CE9B1600023A4C8 /* lab-33.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		0F1627C22CE830F300559863 /* 210-lab-32 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "210-lab-32"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F1627C52CE830F300559863 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		0F633C8F2CE8319B00FC5647 /* Car.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Car.h; sourceTree = "<group>"; };
+		0FB8BCC52CE9B1600023A4C8 /* lab-33.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "lab-33.cpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +60,9 @@
 		0F1627C42CE830F300559863 /* 210-lab-32 */ = {
 			isa = PBXGroup;
 			children = (
+				0F633C8F2CE8319B00FC5647 /* Car.h */,
 				0F1627C52CE830F300559863 /* main.cpp */,
+				0FB8BCC52CE9B1600023A4C8 /* lab-33.cpp */,
 			);
 			path = "210-lab-32";
 			sourceTree = "<group>";
@@ -120,6 +125,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F1627C62CE830F300559863 /* main.cpp in Sources */,
+				0FB8BCC62CE9B1600023A4C8 /* lab-33.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
