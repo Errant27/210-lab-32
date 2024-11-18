@@ -2,59 +2,123 @@
 #include <iomanip>
 #include <deque>
 #include <random>
+#include <chrono>
 #include "Car.h"
 using namespace std;
 
-const int SIZE = 2;
-const int WIDTH = 3;
+const int SIZE = 4;
+const int WIDTH = 4;
+const int c15 = 15;
+const int c39 = 39;
+
 int rand_num();
 
 int main() {
-    deque<Car> tollBooth(SIZE);    // Deque initlized, size declaration auiomatically constructs 2 Cars in the deque
+    deque<Car> tollLanes[SIZE];    // array of deques initlized
+    
+    for (int i = 0; i < SIZE; i++) {    // each lane populated with 3 cars
+        for (int j = 0; j < 3; j++) {
+            Car newCar;
+            tollLanes[i].push_back(newCar);
+        }
+    }
+    
     
     cout << "Intial queue:" << endl;
-    for (auto i = 0; i < tollBooth.size(); i++) {    // Outputs the inital queue
-        cout << setw(WIDTH) << "[" << tollBooth.at(i).getYear() << " " << tollBooth.at(i).getMake();
-        cout << " (" <<  tollBooth.at(i).getTransponder() << ")]"<< endl;
+    for (int i = 0; i < SIZE; i++) {
+        cout << "Lane: " << i+1 << endl;
+        for (auto j = 0; j < tollLanes[i].size(); j++) {
+            cout << setw(WIDTH) << "[" << tollLanes[i].at(j).getYear() << " " << tollLanes[i].at(j).getMake();
+            cout << " (" <<  tollLanes[i].at(j).getTransponder() << ")]"<< endl;
+        }
     }
-    cout << "---------\n";
+    cout << "------------------\n";
     
-    static int count = 1;    // satic int to keep count of the number of times perations are done
-    while (tollBooth.empty() == false) {
-        cout << "Time: " << count << endl;
-        int oper = rand_num();    // int variable gets a random number to determine operation
+
+    static int count = 0;
+    while (count < 20) {
+        cout << "Time: " << count + 1 << endl;
         
-        if (oper <= 45) {   // 45% chance new car arrives at toll booth
-            Car newCar;
-            tollBooth.push_back(newCar);
-            cout << "Operation: Car joined toll; [" << newCar.getYear() << " " << newCar.getMake();
-            cout<< " (" <<  newCar.getTransponder() << ")]"<< endl;
-        }
-        else if (oper > 45) {   // 55% head car pays and leaves
-            cout << "Operation: Car paid toll; [" << tollBooth.at(0).getYear() << " " << tollBooth.at(0).getMake();
-            cout<< " (" <<  tollBooth.at(0).getTransponder() << ")]"<< endl;
-            tollBooth.pop_front();
-        }
+        for (int i = 0; i < SIZE; i++) {
+            int oper = rand() % 100 + 1;
+            cout << "| Lane " << i+1 << " | ";
+            
+            
+            if (!tollLanes[i].empty()) {
+                if (oper <= c15) {   // car shifts lanes
+                    int shifLane = rand_num();
+                    
+                    tollLanes[shifLane].push_back(tollLanes[i].at(tollLanes[i].size() - 1));
+                    
+                    cout << "Shifted to lane " << shifLane + 1 << ": [" << tollLanes[i].at(tollLanes[i].size() - 1).getYear() << " ";
+                    cout << tollLanes[i].at(tollLanes[i].size() - 1).getMake();
+                    cout<< " (" <<  tollLanes[i].at(tollLanes[i].size() - 1).getTransponder() << ")]"<< endl;
+                    
+                    tollLanes[i].pop_back();
+                }
+                
+                else if (oper > c15 && oper <= c39)
+                { // car added to lane
+                    Car newCar;
+                    tollLanes[i].push_back(newCar);
+                    cout << "Joined: [" << newCar.getYear() << " " << newCar.getMake();
+                    cout<< " (" <<  newCar.getTransponder() << ")]"<< endl;
+                }
+                
+                else if (oper > c39 && !tollLanes[i].empty())
+                {   // car leaves
+                    cout << "Paid: [" << tollLanes[i].at(0).getYear() << " " << tollLanes[i].at(0).getMake();
+                    cout<< " (" << tollLanes[i].at(0).getTransponder() << ")]"<< endl;
+                    tollLanes[i].pop_front();
+                }
+            }
+            
+            else if (tollLanes[i].empty() && oper > 50)
+            {
+                Car newCar;
+                tollLanes[i].push_back(newCar);
+                cout << "Joined: [" << newCar.getYear() << " " << newCar.getMake();
+                cout<< " (" <<  newCar.getTransponder() << ")]"<< endl;
+            }
     
-        if (tollBooth.empty() == false) {    // if the cue has not been emptied after an operation has been complete, the updated list is printed
+            else
+                cout << "No change" << endl;
+        }
+            
+        cout << endl;
+        
+        if (count < 20)
+        {
             cout << "Updated Queue:" << endl;
-            for (auto i = 0; i < tollBooth.size(); i++) {    // Outputs the updated queue
-                cout << setw(WIDTH) << "[" << tollBooth.at(i).getYear() << " " << tollBooth.at(i).getMake();
-                cout << " (" <<  tollBooth.at(i).getTransponder() << ")]"<< endl;
+            
+            for (int i = 0; i < SIZE; i++) {
+                cout << "Lane: " << i+1 << endl;
+                
+                if (!(tollLanes[i].empty())) {
+                    for (auto j = 0; j < tollLanes[i].size(); j++) {
+                        cout << setw(WIDTH) << "[" << tollLanes[i].at(j).getYear() << " " << tollLanes[i].at(j).getMake();
+                        cout << " (" <<  tollLanes[i].at(j).getTransponder() << ")]"<< endl;
+                    }
+                }
+                
+                if (tollLanes[i].empty())
+                    cout << "   [No Cars]" << endl;
             }
         }
-        cout << "---------\n";    // count is increased
+            
+        cout << "------------------\n";    // count is increased
         count++;
     }
-    cout << "TOLL BOOTH COMPLETE" << endl;     // message notifying toll is complete
+    
+    cout << "SIMULATION COMPLETE" << endl;     // message notifying toll is complete
    
     return 0;
 }
 
 int rand_num() {    // Function to generate random number
     random_device randNum;
-    uniform_int_distribution<int>range(1, 100);
+    uniform_int_distribution<int>range(0, 3);
     int num = range(randNum);
-    
+
     return num;
 }
