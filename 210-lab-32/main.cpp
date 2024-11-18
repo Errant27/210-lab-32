@@ -23,8 +23,7 @@ int main() {
         }
     }
     
-    
-    cout << "Intial queue:" << endl;
+    cout << "Intial Queue:" << endl;    // inital queue of each lane is printed
     for (int i = 0; i < SIZE; i++) {
         cout << "Lane: " << i+1 << endl;
         for (auto j = 0; j < tollLanes[i].size(); j++) {
@@ -34,9 +33,8 @@ int main() {
     }
     cout << "------------------\n";
     
-
     static int count = 0;
-    while (count < 20) {
+    while (count < 20) {    // while loop to run 20 time intervals
         cout << "Time: " << count + 1 << endl;
         
         for (int i = 0; i < SIZE; i++) {
@@ -44,10 +42,10 @@ int main() {
             cout << "| Lane " << i+1 << " | ";
             
             
-            if (!tollLanes[i].empty()) {
-                if (oper <= c15) {   // car shifts lanes
-                    int shifLane = rand_num();
-                    
+            if (!tollLanes[i].empty()) {    // All done if the lane is not empty
+                if (oper <= c15) {   // chance car shifts lanes
+                   
+                    int shifLane = rand_num();    // random numer hcosen within range of lanes, car moves to that lane
                     tollLanes[shifLane].push_back(tollLanes[i].at(tollLanes[i].size() - 1));
                     
                     cout << "Shifted to lane " << shifLane + 1 << ": [" << tollLanes[i].at(tollLanes[i].size() - 1).getYear() << " ";
@@ -57,24 +55,21 @@ int main() {
                     tollLanes[i].pop_back();
                 }
                 
-                else if (oper > c15 && oper <= c39)
-                { // car added to lane
+                else if (oper < c15 + c39) { // chance car added to lane
                     Car newCar;
                     tollLanes[i].push_back(newCar);
                     cout << "Joined: [" << newCar.getYear() << " " << newCar.getMake();
                     cout<< " (" <<  newCar.getTransponder() << ")]"<< endl;
                 }
                 
-                else if (oper > c39 && !tollLanes[i].empty())
-                {   // car leaves
+                else if (oper > c39 && !tollLanes[i].empty()) {   // chance car leaves toll booth
                     cout << "Paid: [" << tollLanes[i].at(0).getYear() << " " << tollLanes[i].at(0).getMake();
                     cout<< " (" << tollLanes[i].at(0).getTransponder() << ")]"<< endl;
                     tollLanes[i].pop_front();
                 }
             }
             
-            else if (tollLanes[i].empty() && oper > 50)
-            {
+            else if (tollLanes[i].empty() && oper < 50) {    // done only if lane is empty, 50% chance a new Car enters
                 Car newCar;
                 tollLanes[i].push_back(newCar);
                 cout << "Joined: [" << newCar.getYear() << " " << newCar.getMake();
@@ -82,15 +77,11 @@ int main() {
             }
     
             else
-                cout << "No change" << endl;
-        }
+                cout << "No change" << endl;    // message indicatig thee has been no change,
+        }                                       // if no cars added to an empty lane or changed with an occupied lane
             
         cout << endl;
-        
-        if (count < 20)
-        {
-            cout << "Updated Queue:" << endl;
-            
+        cout << "Updated Queue:" << endl;
             for (int i = 0; i < SIZE; i++) {
                 cout << "Lane: " << i+1 << endl;
                 
@@ -104,18 +95,17 @@ int main() {
                 if (tollLanes[i].empty())
                     cout << "   [No Cars]" << endl;
             }
-        }
+        
             
         cout << "------------------\n";    // count is increased
         count++;
     }
     
     cout << "SIMULATION COMPLETE" << endl;     // message notifying toll is complete
-   
     return 0;
 }
 
-int rand_num() {    // Function to generate random number
+int rand_num() {    // Function to generate random number for a  shifted lane
     random_device randNum;
     uniform_int_distribution<int>range(0, 3);
     int num = range(randNum);
